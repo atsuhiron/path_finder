@@ -57,7 +57,7 @@ namespace PathFinderTests.Geom
             var edges = new List<IEdge>() { new NonDirectionalEdge(1, 0), new NonDirectionalEdge(0, 2) };
             var nodeIndices = new List<int>() { 1, 0 };
 
-            var ex = Assert.Throws<ArgumentException>(() => new Nodes(edges, nodeIndices));
+            _ = Assert.Throws<ArgumentException>(() => new Nodes(edges, nodeIndices));
         }
 
         [Fact]
@@ -85,7 +85,7 @@ namespace PathFinderTests.Geom
         {
             var sut = new Nodes(new List<IEdge>() { new NonDirectionalEdge(1, 0), new NonDirectionalEdge(0, 2) });
 
-            var ex = Assert.Throws<ArgumentException>(() => sut.AddEdge(new NonDirectionalEdge(0, 3), false));
+            _ = Assert.Throws<ArgumentException>(() => sut.AddEdge(new NonDirectionalEdge(0, 3), false));
         }
 
         [Fact]
