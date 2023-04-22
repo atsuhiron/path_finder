@@ -1,40 +1,67 @@
 ﻿namespace PathFinder.Geom
 {
-    public interface IEdge
+    public interface IEdge : IEquatable<IEdge>
     {
-        public uint Start { get; init; }
-        public uint End { get; init; }
-        public uint Cost { get; init; }
+        public int Start { get; init; }
+        public int End { get; init; }
+        public int Cost { get; init; }
         public bool Directed { get; init; }
+
+        public int GetHashCodeCore();
     }
 
     public abstract class BaseEdge : IEdge
     {
-        public abstract uint Start { get; init; }
-        public abstract uint End { get; init; }
-        public abstract uint Cost { get; init; }
+        public abstract int Start { get; init; }
+        public abstract int End { get; init; }
+        public abstract int Cost { get; init; }
         public abstract bool Directed { get; init; }
+
+        public abstract int GetHashCodeCore();
 
         public override string ToString()
         {
             if (Cost == 1) return $"({Start} -> {End})";
             return $"({Start} -> {End} : Cost={Cost})";
         }
+
+        public override int GetHashCode()
+        {
+            return GetHashCodeCore();
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return this.Equals(obj as IEdge);
+        }
+
+        public bool Equals(IEdge? other)
+        {
+            if (other == null) return false;
+            return this.GetHashCodeCore() == other.GetHashCodeCore();
+        }
     }
 
     public class NonDirectionalEdge : BaseEdge
     {
-        public override uint Start { get; init; }
-        public override uint End { get; init; }
-        public override uint Cost { get; init; }
+        public override int Start { get; init; }
+        public override int End { get; init; }
+        public override int Cost { get; init; }
         public override bool Directed { get; init; }
 
-        public NonDirectionalEdge(uint start, uint end, uint cost=1)
+        public NonDirectionalEdge(int start, int end, int cost=1)
         {
             Start = start;
             End = end;
             Cost = cost;
             Directed = false;
+        }
+
+        public override int GetHashCodeCore()
+        {
+            var small = Math.Min(Start, End);
+            var large = Math.Max(Start, End);
+            return Tuple.Create(small, large, Cost).GetHashCode();
         }
     }
 }

@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathFinder", "PathFinder\PathFinder.csproj", "{B3C10CA4-DE74-48A7-B02E-A05934390D6B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PathFinder", "PathFinder\PathFinder.csproj", "{B3C10CA4-DE74-48A7-B02E-A05934390D6B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathFinderTests", "PathFinderTests\PathFinderTests.csproj", "{2FCC20F9-E0BB-401E-88DA-8A20F1BCCB4C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B3C10CA4-DE74-48A7-B02E-A05934390D6B} = {B3C10CA4-DE74-48A7-B02E-A05934390D6B}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +20,10 @@ Global
 		{B3C10CA4-DE74-48A7-B02E-A05934390D6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3C10CA4-DE74-48A7-B02E-A05934390D6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3C10CA4-DE74-48A7-B02E-A05934390D6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FCC20F9-E0BB-401E-88DA-8A20F1BCCB4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FCC20F9-E0BB-401E-88DA-8A20F1BCCB4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FCC20F9-E0BB-401E-88DA-8A20F1BCCB4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FCC20F9-E0BB-401E-88DA-8A20F1BCCB4C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
