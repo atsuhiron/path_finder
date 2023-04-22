@@ -9,12 +9,12 @@ namespace PathFinder.Geom
     public class Nodes
     {
         public List<IEdge> Edges { get; init; }
-        public List<uint> NodeIndecies { get; init; }
+        public List<uint> NodeIndices { get; init; }
 
         public Nodes()
         {
             Edges = new List<IEdge>();
-            NodeIndecies = new List<uint>();
+            NodeIndices = new List<uint>();
         }
 
         public Nodes(List<IEdge> edges)
@@ -22,14 +22,14 @@ namespace PathFinder.Geom
             Edges = edges;
             var _ni = new HashSet<uint>(edges.Select(e => e.Start));
             _ni.UnionWith(edges.Select(e => e.End));
-            NodeIndecies = _ni.ToList();
-            NodeIndecies.Sort();
+            NodeIndices = _ni.ToList();
+            NodeIndices.Sort();
         }
 
-        public Nodes(List<IEdge> edges, List<uint> nodeIndecies)
+        public Nodes(List<IEdge> edges, List<uint> nodeIndices)
         {
             Edges = edges;
-            NodeIndecies = nodeIndecies;
+            NodeIndices = nodeIndices;
             if (! CheckAllEdge())
             {
                 throw new ArgumentException("未定義の Node が Edge の定義に含まれています。");
@@ -38,13 +38,13 @@ namespace PathFinder.Geom
 
         private bool CheckAllEdge()
         {
-            var nodeSet = new HashSet<uint>(NodeIndecies);
+            var nodeSet = new HashSet<uint>(NodeIndices);
             return Edges.All(e => nodeSet.Contains(e.Start)) && Edges.All(e => nodeSet.Contains(e.End));
         }
 
         private bool CheckEdge(IEdge edge)
         {
-            return NodeIndecies.Contains(edge.Start) && NodeIndecies.Contains(edge.End);
+            return NodeIndices.Contains(edge.Start) && NodeIndices.Contains(edge.End);
         }
     }
 }
