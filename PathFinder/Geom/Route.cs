@@ -29,7 +29,7 @@
             Iteration = iter;
         }
 
-        public int SumCost() => RouteEdges.Select(e => e.Cost).Sum();
+        public float SumCost() => RouteEdges.Select(e => e.Cost).Sum();
 
         private static bool ValidateEdgeContinuity(List<IEdge> routeEdges)
         {

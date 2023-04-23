@@ -4,7 +4,7 @@
     {
         public int Start { get; init; }
         public int End { get; init; }
-        public int Cost { get; init; }
+        public float Cost { get; init; }
         public bool Directed { get; init; }
 
         public int GetHashCodeCore();
@@ -14,7 +14,7 @@
     {
         public abstract int Start { get; init; }
         public abstract int End { get; init; }
-        public abstract int Cost { get; init; }
+        public abstract float Cost { get; init; }
         public abstract bool Directed { get; init; }
 
         public abstract int GetHashCodeCore();
@@ -46,7 +46,7 @@
     {
         public override int Start { get; init; }
         public override int End { get; init; }
-        public override int Cost { get; init; }
+        public override float Cost { get; init; }
         public override bool Directed { get; init; }
 
         public NonDirectionalEdge(int start, int end, int cost=1)
