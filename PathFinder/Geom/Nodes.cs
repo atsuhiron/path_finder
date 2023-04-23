@@ -58,6 +58,16 @@ namespace PathFinder.Geom
             Edges.Add(edge);
         }
 
+        public List<int> GetAdjacencies(int index)
+        {
+            // TODO: あらかじめ隣接行列を定義した方が良いかも
+            var adjFrom = new HashSet<int>(Edges.Where(e => e.Start == index).Select(e => e.End));
+            var adjTo = new HashSet<int>(Edges.Where(e => e.End == index).Select(e => e.Start));
+            var adj = adjFrom.Union(adjTo).ToList();
+            adj.Sort();
+            return adj;
+        }
+
         private bool CheckAllEdge()
         {
             var nodeSet = new HashSet<int>(NodeIndices);

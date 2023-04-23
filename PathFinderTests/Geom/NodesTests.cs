@@ -125,5 +125,16 @@ namespace PathFinderTests.Geom
             Assert.Contains(new NonDirectionalEdge(3, 4), sut.Edges);
             Assert.Contains(new NonDirectionalEdge(4, 5), sut.Edges);
         }
+
+        [Fact]
+        public void GetAdjacenciesTest()
+        {
+            // 0 - 1 - 2
+            // |   |   |
+            // 3 - 4 - 5
+            var sut = Nodes.CreateGrid(3, 2);
+            var adj = sut.GetAdjacencies(1);
+            Assert.Equal(new List<int>() { 0, 2, 4 }, adj);
+        }
     }
 }
