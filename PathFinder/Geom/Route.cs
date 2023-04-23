@@ -4,6 +4,7 @@
     {
         public List<int> RouteNodeIndices { get; init; }
         public List<IEdge> RouteEdges { get; init; }
+        public bool Success { get; init; }
 
         public Route(List<IEdge> routeEdges)
         {
@@ -15,6 +16,14 @@
             
             RouteNodeIndices = routeEdges.Select(e => e.Start).ToList();
             RouteNodeIndices.Add(routeEdges.Last().End);
+            Success = true;
+        }
+
+        public Route()
+        {
+            RouteEdges = new List<IEdge>();
+            RouteNodeIndices = new List<int>();
+            Success = false;
         }
 
         public int SumCost() => RouteEdges.Select(e => e.Cost).Sum();
