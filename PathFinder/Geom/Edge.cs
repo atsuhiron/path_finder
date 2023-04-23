@@ -49,7 +49,7 @@
         public override float Cost { get; init; }
         public override bool Directed { get; init; }
 
-        public NonDirectionalEdge(int start, int end, int cost=1)
+        public NonDirectionalEdge(int start, int end, float cost=1.0f)
         {
             Start = start;
             End = end;

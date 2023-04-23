@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PathFinder.Geom;
+﻿using PathFinder.Geom;
 
 namespace PathFinderTests.Geom
 {
@@ -135,6 +130,46 @@ namespace PathFinderTests.Geom
             var sut = Nodes.CreateGrid(3, 2);
             var adj = sut.GetAdjacencies(1);
             Assert.Equal(new List<int>() { 0, 2, 4 }, adj);
+        }
+
+        [Fact]
+        public void GetEdgeNormalTest()
+        {
+            // 0 - 1 - 2
+            // |   |   |
+            // 3 - 4 - 5
+            var sut = Nodes.CreateGrid(3, 2);
+            var edgeOrdinal = sut.GetEdge(0, 3);
+            var edgeInverse = sut.GetEdge(3, 0);
+            Assert.True(edgeOrdinal.Equals(edgeInverse));
+        }
+
+        [Fact]
+        public void GetEdgeNotFoundTest()
+        {
+            // 0 - 1 - 2
+            // |   |   |
+            // 3 - 4 - 5
+            var sut = Nodes.CreateGrid(3, 2);
+
+            _ = Assert.Throws<ArgumentException>(() => sut.GetEdge(0, 4));
+            _ = Assert.Throws<ArgumentException>(() => sut.GetEdge(4, 0));
+        }
+
+        [Fact]
+        public void GetEdgeLowestCostTest()
+        {
+            //   3.2
+            // 0 === 1
+            //   1.5
+            var sut = new Nodes(new List<IEdge>()
+            {
+                new NonDirectionalEdge(0, 1, 3.2f),
+                new NonDirectionalEdge(0, 1, 1.5f)
+            });
+
+            var lowestEdge = sut.GetEdge(0, 1);
+            Assert.Equal(1.5, lowestEdge.Cost);
         }
     }
 }

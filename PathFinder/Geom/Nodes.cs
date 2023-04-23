@@ -8,6 +8,8 @@ namespace PathFinder.Geom
 {
     public class Nodes
     {
+        private static readonly CostComparer s_costComparer = new();
+
         public List<IEdge> Edges { get; init; }
         public List<int> NodeIndices { get; init; }
 
@@ -66,6 +68,16 @@ namespace PathFinder.Geom
             var adj = adjFrom.Union(adjTo).ToList();
             adj.Sort();
             return adj;
+        }
+
+        public IEdge GetEdge(int nodeIndex1, int nodeIndex2)
+        {
+            var edge = Edges.Where(e => ((e.Start == nodeIndex1) && (e.End == nodeIndex2)) || (e.Start == nodeIndex2) && (e.End == nodeIndex1)).ToList();
+            
+            if (edge.Count == 0) throw new ArgumentException("指定された Edge が存在しません");
+            if (edge.Count == 1) return edge.First();
+            edge.Sort(s_costComparer);
+            return edge.First();
         }
 
         private bool CheckAllEdge()
