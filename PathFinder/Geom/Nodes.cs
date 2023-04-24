@@ -80,6 +80,8 @@ namespace PathFinder.Geom
             return edge.First();
         }
 
+        public int GetNodeCount() => NodeIndices.Count;
+
         private bool CheckAllEdge()
         {
             var nodeSet = new HashSet<int>(NodeIndices);

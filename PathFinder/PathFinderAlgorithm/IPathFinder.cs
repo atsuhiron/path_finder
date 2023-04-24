@@ -4,6 +4,7 @@ namespace PathFinder.PathFinderAlgorithm
 {
     public interface IPathFinder
     {
-        Route FindRoute(int start, int end);
+        public Nodes Nodes { get; set; }
+        public Route FindRoute(int start, int end);
     }
 }
