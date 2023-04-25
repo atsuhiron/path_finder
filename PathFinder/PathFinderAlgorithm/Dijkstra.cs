@@ -4,6 +4,8 @@ namespace PathFinder.PathFinderAlgorithm
 {
     public class Dijkstra : IPathFinder
     {
+        private static readonly MinCostMemoComparer s_minCostMemoComparer = new();
+
         private const int MAX_ITER = 10000;
 
         public Nodes Nodes { get; set; }
@@ -15,86 +17,61 @@ namespace PathFinder.PathFinderAlgorithm
 
         public Route FindRoute(int start, int end)
         {
-            //var _kvPairsCost = this.Nodes.NodeIndices.Select(index => KeyValuePair.Create(index, float.MaxValue));
-            //var _kvPairsVisited = this.Nodes.NodeIndices.Select(index => KeyValuePair.Create(index, false));
-            //var minimumCost = new Dictionary<int, float>(_kvPairsCost)
-            //{
-            //    [start] = 0f
-            //};
-            //var visited = new Dictionary<int, bool>(_kvPairsVisited);
-            //var nodeIndices = new HashSet<int>(this.Nodes.NodeIndices);
-
-            //var route = new List<IEdge>();
-            //int iterCount = 0;
-
-            //while (nodeIndices.Count > 0 && iterCount <= MAX_ITER)
-            //{
-            //    (int poppedIndex, nodeIndices) = PopMinimumFromList(nodeIndices, minimumCost);
-            //    if (visited[poppedIndex]) continue;
-            //    visited[poppedIndex] = true;
-
-            //    var adj = this.Nodes.GetAdjacencies(poppedIndex);
-            //    foreach (var adjNodeIndex in adj)
-            //    {
-            //        var edge = this.Nodes.GetEdge(poppedIndex, adjNodeIndex);
-            //        if (minimumCost[adjNodeIndex] > minimumCost[poppedIndex] + edge.Cost)
-            //        {
-            //            minimumCost[adjNodeIndex] = minimumCost[poppedIndex] + edge.Cost;
-            //            route.Add(edge);
-            //        }
-            //    }
-
-            //    iterCount++;
-            //}
-
-            //return new Route(route, iterCount);
-
             var nodeCount = Nodes.GetNodeCount();
-            var priorityQueue = new PriorityQueue<int, float>();
-            priorityQueue.Enqueue(start, 0f);
+            var priorityQueue = new PriorityQueue<int, MinCostMemo>(s_minCostMemoComparer);
+            priorityQueue.Enqueue(start, new MinCostMemo(0f, null));
             int iterCount = 0;
 
-            var costs = new Dictionary<int, float>(this.Nodes.NodeIndices.Select(index => KeyValuePair.Create(index, float.MaxValue)));
+            var costs = new Dictionary<int, MinCostMemo>(this.Nodes.NodeIndices.Select(index => KeyValuePair.Create(index, new MinCostMemo())));
             var visited = new Dictionary<int, bool>(this.Nodes.NodeIndices.Select(index => KeyValuePair.Create(index, false)));
 
-            while (priorityQueue.TryDequeue(out int nodeIndex, out float currentCost))
+            while (priorityQueue.TryDequeue(out int nodeIndex, out var currentMinCostMemo))
             {
                 if (iterCount >= MAX_ITER) return new Route(MAX_ITER);
                 if (visited[nodeIndex]) continue;
 
-                costs[nodeIndex] = currentCost;
+                costs[nodeIndex] = currentMinCostMemo;
                 visited[nodeIndex] = true;
 
                 foreach (var adjIndex in this.Nodes.GetAdjacencies(nodeIndex))
                 {
                     var edge = this.Nodes.GetEdge(nodeIndex, adjIndex);
-                    priorityQueue.Enqueue(adjIndex, currentCost + edge.Cost);
+                    priorityQueue.Enqueue(adjIndex, new MinCostMemo(currentMinCostMemo.Cost + edge.Cost, nodeIndex));
                 }
                 iterCount++;
             }
 
             // TODO: cost -> route
-            return new Route(iterCount);
+            var edges = BackwardRoute(costs, start, end);
+            if (edges == null) return new Route(iterCount);
+            return new Route(edges, iterCount);
         }
 
-        private static (int, HashSet<int>) PopMinimumFromList(HashSet<int> nodeIndices, in Dictionary<int, float> minimumCost)
+        private List<IEdge>? BackwardRoute(in Dictionary<int, MinCostMemo> minCostDict, int start, int end)
         {
-            var minCost = float.MaxValue;
-            int minCostKey = -1;
-            var found = false;
-            foreach (var kv in minimumCost)
+            var edges = new List<IEdge>();
+            if (start == end) return edges;
+
+            var currentIndex = end;
+            int? beforeIndex = null;
+
+            while (beforeIndex != start)
             {
-                if ((kv.Value < minCost) && (nodeIndices.Contains(kv.Key)))
+                if (! minCostDict.ContainsKey(currentIndex)) return null;
+
+                beforeIndex = minCostDict[currentIndex].PreviousNode;
+
+                if (beforeIndex == null)
                 {
-                    minCost = kv.Value;
-                    minCostKey = kv.Key;
-                    found = true;
+                    return null;
                 }
+
+                edges.Add(Nodes.GetEdge(currentIndex, (int)beforeIndex));
+                currentIndex = (int)beforeIndex;
             }
 
-            if (!found) throw new ArgumentException("全ての minimumCost が未初期化です。");
-            nodeIndices.Remove(minCostKey);
-            return (minCostKey, nodeIndices);
+            edges.Reverse();
+            return edges;
         }
     }
 }
