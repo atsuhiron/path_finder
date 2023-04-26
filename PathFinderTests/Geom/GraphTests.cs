@@ -7,32 +7,32 @@ namespace PathFinderTests.Geom
         [Fact]
         public void ConstructoeTestWithNoArg()
         {
-            var nodes = new Graph();
-            Assert.Empty(nodes.NodeIndices);
-            Assert.Empty(nodes.Edges);
+            var graph = new Graph();
+            Assert.Empty(graph.NodeIndices);
+            Assert.Empty(graph.Edges);
         }
 
         [Fact]
         public void ConstructorTestWithEdges()
         {
             var edges = new List<IEdge>() { new NonDirectionalEdge(1, 0) };
-            var nodes = new Graph(edges);
+            var graph = new Graph(edges);
 
-            Assert.Equal(2, nodes.NodeIndices.Count);
-            Assert.Equal(0, nodes.NodeIndices[0]);
-            Assert.Equal(1, nodes.NodeIndices[1]);
+            Assert.Equal(2, graph.NodeIndices.Count);
+            Assert.Equal(0, graph.NodeIndices[0]);
+            Assert.Equal(1, graph.NodeIndices[1]);
         }
 
         [Fact]
         public void ConstructorTestWithDuplicatedEdges()
         {
             var edges = new List<IEdge>() { new NonDirectionalEdge(1, 0), new NonDirectionalEdge(0, 1) };
-            var nodes = new Graph(edges);
+            var graph = new Graph(edges);
 
-            Assert.Single(nodes.Edges);
-            Assert.Equal(2, nodes.NodeIndices.Count);
-            Assert.Equal(0, nodes.NodeIndices[0]);
-            Assert.Equal(1, nodes.NodeIndices[1]);
+            Assert.Single(graph.Edges);
+            Assert.Equal(2, graph.NodeIndices.Count);
+            Assert.Equal(0, graph.NodeIndices[0]);
+            Assert.Equal(1, graph.NodeIndices[1]);
         }
 
         [Fact]
@@ -40,10 +40,10 @@ namespace PathFinderTests.Geom
         {
             var edges = new List<IEdge>() { new NonDirectionalEdge(1, 0) };
             var nodeIndices = new List<int>() { 1, 0 };
-            var nodes = new Graph(edges, nodeIndices);
+            var graph = new Graph(edges, nodeIndices);
 
-            Assert.Equal(0, nodes.NodeIndices[0]);
-            Assert.Equal(1, nodes.NodeIndices[1]);
+            Assert.Equal(0, graph.NodeIndices[0]);
+            Assert.Equal(1, graph.NodeIndices[1]);
         }
 
         [Fact]

@@ -8,22 +8,22 @@ namespace PathFinder.PathFinderAlgorithm
 
         private const int MAX_ITER = 10000;
 
-        public Graph Nodes { get; set; }
+        public Graph Graph { get; set; }
 
-        public Dijkstra(Graph nodes)
+        public Dijkstra(Graph graph)
         {
-            this.Nodes = nodes;
+            this.Graph = graph;
         }
 
         public Route FindRoute(int start, int end)
         {
-            var nodeCount = Nodes.GetNodeCount();
+            var nodeCount = Graph.GetNodeCount();
             var priorityQueue = new PriorityQueue<int, MinCostMemo>(s_minCostMemoComparer);
             priorityQueue.Enqueue(start, new MinCostMemo(0f, null));
             int iterCount = 0;
 
-            var costs = new Dictionary<int, MinCostMemo>(this.Nodes.NodeIndices.Select(index => KeyValuePair.Create(index, new MinCostMemo())));
-            var visited = new Dictionary<int, bool>(this.Nodes.NodeIndices.Select(index => KeyValuePair.Create(index, false)));
+            var costs = new Dictionary<int, MinCostMemo>(this.Graph.NodeIndices.Select(index => KeyValuePair.Create(index, new MinCostMemo())));
+            var visited = new Dictionary<int, bool>(this.Graph.NodeIndices.Select(index => KeyValuePair.Create(index, false)));
 
             while (priorityQueue.TryDequeue(out int nodeIndex, out var currentMinCostMemo))
             {
@@ -33,9 +33,9 @@ namespace PathFinder.PathFinderAlgorithm
                 costs[nodeIndex] = currentMinCostMemo;
                 visited[nodeIndex] = true;
 
-                foreach (var adjIndex in this.Nodes.GetAdjacencies(nodeIndex))
+                foreach (var adjIndex in this.Graph.GetAdjacencies(nodeIndex))
                 {
-                    var edge = this.Nodes.SearchEdge(nodeIndex, adjIndex);
+                    var edge = this.Graph.SearchEdge(nodeIndex, adjIndex);
                     priorityQueue.Enqueue(adjIndex, new MinCostMemo(currentMinCostMemo.Cost + edge.Cost, nodeIndex));
                 }
                 iterCount++;
@@ -66,7 +66,7 @@ namespace PathFinder.PathFinderAlgorithm
                     return null;
                 }
 
-                edges.Add(Nodes.SearchEdge(currentIndex, (int)beforeIndex));
+                edges.Add(Graph.SearchEdge(currentIndex, (int)beforeIndex));
                 currentIndex = (int)beforeIndex;
             }
 
