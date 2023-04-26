@@ -1,25 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PathFinder.Geom
+﻿namespace PathFinder.Geom
 {
-    public class Nodes
+    public class Graph
     {
         private static readonly CostComparer s_costComparer = new();
 
         public List<IEdge> Edges { get; init; }
         public List<int> NodeIndices { get; init; }
 
-        public Nodes()
+        public Graph()
         {
             Edges = new List<IEdge>();
             NodeIndices = new List<int>();
         }
 
-        public Nodes(List<IEdge> edges)
+        public Graph(List<IEdge> edges)
         {
             Edges = new HashSet<IEdge>(edges).ToList();
             var _ni = new HashSet<int>(edges.Select(e => e.Start));
@@ -28,7 +22,7 @@ namespace PathFinder.Geom
             NodeIndices.Sort();
         }
 
-        public Nodes(List<IEdge> edges, List<int> nodeIndices)
+        public Graph(List<IEdge> edges, List<int> nodeIndices)
         {
             Edges = new HashSet<IEdge>(edges).ToList();
             NodeIndices = nodeIndices;
@@ -70,7 +64,7 @@ namespace PathFinder.Geom
             return adj;
         }
 
-        public IEdge GetEdge(int nodeIndex1, int nodeIndex2)
+        public IEdge SearchEdge(int nodeIndex1, int nodeIndex2)
         {
             var edge = Edges.Where(e => ((e.Start == nodeIndex1) && (e.End == nodeIndex2)) || (e.Start == nodeIndex2) && (e.End == nodeIndex1)).ToList();
             
@@ -93,7 +87,7 @@ namespace PathFinder.Geom
             return NodeIndices.Contains(edge.Start) && NodeIndices.Contains(edge.End);
         }
 
-        public static Nodes CreateGrid(int x, int y)
+        public static Graph CreateGrid(int x, int y)
         {
             var edges = new List<IEdge>();
 
@@ -107,7 +101,7 @@ namespace PathFinder.Geom
                 }
             }
 
-            return new Nodes(edges);
+            return new Graph(edges);
         }
     }
 }

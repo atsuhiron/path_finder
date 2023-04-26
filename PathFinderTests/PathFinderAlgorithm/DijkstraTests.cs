@@ -10,7 +10,7 @@ namespace PathFinderTests.PathFinderAlgorithm
         {
             //   3.2   1.0
             // 0 --- 1 --- 2
-            var _nodes = new Nodes(new List<IEdge>()
+            var _nodes = new Graph(new List<IEdge>()
             {
                 new NonDirectionalEdge(0, 1, 3.2f),
                 new NonDirectionalEdge(1, 2, 1.0f)
@@ -43,7 +43,7 @@ namespace PathFinderTests.PathFinderAlgorithm
             // 0 -> 4                : 12.25
             // 0 -> 5 -> 6 -> 4      :  8.0
 
-            var _nodes = new Nodes(new List<IEdge>()
+            var _nodes = new Graph(new List<IEdge>()
             {
                 new NonDirectionalEdge(0, 1, 1.5f),
                 new NonDirectionalEdge(1, 2, 0.5f),

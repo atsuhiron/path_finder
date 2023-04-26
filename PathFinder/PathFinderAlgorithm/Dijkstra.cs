@@ -8,9 +8,9 @@ namespace PathFinder.PathFinderAlgorithm
 
         private const int MAX_ITER = 10000;
 
-        public Nodes Nodes { get; set; }
+        public Graph Nodes { get; set; }
 
-        public Dijkstra(Nodes nodes)
+        public Dijkstra(Graph nodes)
         {
             this.Nodes = nodes;
         }
@@ -35,7 +35,7 @@ namespace PathFinder.PathFinderAlgorithm
 
                 foreach (var adjIndex in this.Nodes.GetAdjacencies(nodeIndex))
                 {
-                    var edge = this.Nodes.GetEdge(nodeIndex, adjIndex);
+                    var edge = this.Nodes.SearchEdge(nodeIndex, adjIndex);
                     priorityQueue.Enqueue(adjIndex, new MinCostMemo(currentMinCostMemo.Cost + edge.Cost, nodeIndex));
                 }
                 iterCount++;
@@ -66,7 +66,7 @@ namespace PathFinder.PathFinderAlgorithm
                     return null;
                 }
 
-                edges.Add(Nodes.GetEdge(currentIndex, (int)beforeIndex));
+                edges.Add(Nodes.SearchEdge(currentIndex, (int)beforeIndex));
                 currentIndex = (int)beforeIndex;
             }
 
