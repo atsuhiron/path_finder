@@ -2,7 +2,8 @@
 {
     public class Graph
     {
-        private static readonly CostComparer s_costComparer = new();
+        private static readonly EdgeCostComparer s_costComparer = new();
+        private static readonly NodeIndexComparer s_nodeIndexComparer = new();
 
         public List<IEdge> Edges { get; init; }
         public List<int> NodeIndices { get; init; }
