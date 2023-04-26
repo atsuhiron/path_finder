@@ -1,6 +1,6 @@
 ﻿namespace PathFinder.Geom
 {
-    public class CostComparer : IComparer<IEdge>
+    public class EdgeCostComparer : IComparer<IEdge>
     {
         public int Compare(IEdge? x, IEdge? y)
         {
