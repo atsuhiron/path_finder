@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace PathFinder.Geom
+﻿namespace PathFinder.Geom
 {
     public class Graph<TEdge, TNode> 
         where TEdge : IEdge
