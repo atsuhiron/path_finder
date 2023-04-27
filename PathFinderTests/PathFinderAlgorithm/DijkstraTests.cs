@@ -10,13 +10,14 @@ namespace PathFinderTests.PathFinderAlgorithm
         {
             //   3.2   1.0
             // 0 --- 1 --- 2
-            var _graph = new Graph(new List<IEdge>()
+            var _graph = new Graph<NonDirectionalEdge, Node>(new List<NonDirectionalEdge>()
             {
                 new NonDirectionalEdge(0, 1, 3.2f),
                 new NonDirectionalEdge(1, 2, 1.0f)
-            });
+            },
+            (int index) => new Node(index));
 
-            var dijkstra = new Dijkstra(_graph);
+            var dijkstra = new Dijkstra<NonDirectionalEdge, Node>(_graph);
             var route = dijkstra.FindRoute(0, 2);
 
             Assert.True(route.Success);
@@ -43,7 +44,7 @@ namespace PathFinderTests.PathFinderAlgorithm
             // 0 -> 4                : 12.25
             // 0 -> 5 -> 6 -> 4      :  8.0
 
-            var _graph = new Graph(new List<IEdge>()
+            var _graph = new Graph<NonDirectionalEdge, Node>(new List<NonDirectionalEdge>()
             {
                 new NonDirectionalEdge(0, 1, 1.5f),
                 new NonDirectionalEdge(1, 2, 0.5f),
@@ -53,9 +54,10 @@ namespace PathFinderTests.PathFinderAlgorithm
                 new NonDirectionalEdge(0, 5, 3.5f),
                 new NonDirectionalEdge(5, 6, 1.0f),
                 new NonDirectionalEdge(6, 4, 3.5f),
-            });
+            },
+            (int index) => new Node(index));
 
-            var dijkstra = new Dijkstra(_graph);
+            var dijkstra = new Dijkstra<NonDirectionalEdge, Node>(_graph);
             var route = dijkstra.FindRoute(0, 4);
 
             Assert.True(route.Success);

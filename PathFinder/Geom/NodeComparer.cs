@@ -1,8 +1,9 @@
 ﻿namespace PathFinder.Geom
 {
-    public class NodeIndexComparer : IComparer<INode>
+    public class NodeIndexComparer<TNode> : IComparer<TNode>
+        where TNode : INode
     {
-        public int Compare(INode? x, INode? y)
+        public int Compare(TNode? x, TNode? y)
         {
             if (x == null && y == null) return 0;
             if (x == null) return -1;

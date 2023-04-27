@@ -1,8 +1,9 @@
 ﻿namespace PathFinder.Geom
 {
-    public class EdgeCostComparer : IComparer<IEdge>
+    public class EdgeCostComparer<TEdge> : IComparer<TEdge>
+        where TEdge : IEdge
     {
-        public int Compare(IEdge? x, IEdge? y)
+        public int Compare(TEdge? x, TEdge? y)
         {
             if (x == null && y == null) return 0;
             if (x == null) return -1;

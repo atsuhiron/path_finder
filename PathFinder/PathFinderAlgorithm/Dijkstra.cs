@@ -2,15 +2,17 @@
 
 namespace PathFinder.PathFinderAlgorithm
 {
-    public class Dijkstra : IPathFinder
+    public class Dijkstra<TEdge, TNode> : IPathFinder<TEdge, TNode>
+        where TEdge : IEdge
+        where TNode : INode
     {
         private static readonly MinCostMemoComparer s_minCostMemoComparer = new();
 
         private const int MAX_ITER = 10000;
 
-        public Graph Graph { get; set; }
+        public Graph<TEdge, TNode> Graph { get; set; }
 
-        public Dijkstra(Graph graph)
+        public Dijkstra(Graph<TEdge, TNode> graph)
         {
             this.Graph = graph;
         }
@@ -22,8 +24,8 @@ namespace PathFinder.PathFinderAlgorithm
             priorityQueue.Enqueue(start, new MinCostMemo(0f, null));
             int iterCount = 0;
 
-            var costs = new Dictionary<int, MinCostMemo>(this.Graph.Nodes.Select(index => KeyValuePair.Create(index, new MinCostMemo())));
-            var visited = new Dictionary<int, bool>(this.Graph.Nodes.Select(index => KeyValuePair.Create(index, false)));
+            var costs = new Dictionary<int, MinCostMemo>(this.Graph.Nodes.Select(n => KeyValuePair.Create(n.Index, new MinCostMemo())));
+            var visited = new Dictionary<int, bool>(this.Graph.Nodes.Select(n => KeyValuePair.Create(n.Index, false)));
 
             while (priorityQueue.TryDequeue(out int nodeIndex, out var currentMinCostMemo))
             {

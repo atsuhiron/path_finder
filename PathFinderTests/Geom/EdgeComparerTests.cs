@@ -17,7 +17,7 @@ namespace PathFinderTests.Geom
                 new NonDirectionalEdge(0, 3, 9.9f)
             };
 
-            memoList.Sort(new EdgeCostComparer());
+            memoList.Sort(new EdgeCostComparer<NonDirectionalEdge>());
             Assert.Equal(0, memoList[0].End);
             Assert.Equal(1, memoList[1].End);
             Assert.Equal(2, memoList[2].End);

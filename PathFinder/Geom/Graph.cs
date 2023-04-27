@@ -1,42 +1,60 @@
-﻿namespace PathFinder.Geom
-{
-    public class Graph
-    {
-        private static readonly EdgeCostComparer s_costComparer = new();
-        private static readonly NodeIndexComparer s_nodeIndexComparer = new();
+﻿using System.Linq;
 
-        public List<IEdge> Edges { get; init; }
-        public List<INode> Nodes { get; init; }
+namespace PathFinder.Geom
+{
+    public class Graph<TEdge, TNode> 
+        where TEdge : IEdge
+        where TNode : INode
+    {
+        private static readonly EdgeCostComparer<TEdge> s_costComparer = new();
+        private static readonly NodeIndexComparer<TNode> s_nodeIndexComparer = new();
+
+        public List<TEdge> Edges { get; init; }
+        public List<TNode> Nodes { get; init; }
 
         public Graph()
         {
-            Edges = new List<IEdge>();
-            Nodes = new List<INode>();
+            Edges = new List<TEdge>();
+            Nodes = new List<TNode>();
         }
 
-        public Graph(List<IEdge> edges)
+        public Graph(List<TEdge> edges, Func<int, TNode> constructor)
         {
-            Edges = new HashSet<IEdge>(edges).ToList();
+            Edges = new HashSet<TEdge>(edges).ToList();
             var _ni = new HashSet<int>(edges.Select(e => e.Start));
             _ni.UnionWith(edges.Select(e => e.End));
             
             var nodeIndices = _ni.ToList();
-            Nodes = _ni.ToList();
-            Nodes.Sort();
+            Nodes = _ni.Select(ni => constructor(ni)).ToList();
+            Nodes.Sort(s_nodeIndexComparer);
         }
 
-        public Graph(List<IEdge> edges, List<int> nodeIndices)
+        public Graph(List<TEdge> edges, List<TNode> nodes)
         {
-            Edges = new HashSet<IEdge>(edges).ToList();
-            Nodes = nodeIndices;
-            Nodes.Sort();
+            Edges = new HashSet<TEdge>(edges).ToList();
+            Nodes = nodes;
+            Nodes.Sort(s_nodeIndexComparer);
             if (! CheckAllEdge())
             {
                 throw new ArgumentException("未定義の Node が Edge の定義に含まれています。");
             }
         }
 
-        public void AddEdge(IEdge edge, bool addNode)
+        public List<int> GetNodeIndices() => Nodes.Select(n => n.Index).ToList();
+
+        public void AddEdge(TEdge edge)
+        {
+            if (Edges.Contains(edge)) return;
+
+            if (!CheckEdge(edge))
+            {
+                throw new ArgumentException("未定義の Node が Edge の定義に含まれています。");
+            }
+
+            Edges.Add(edge);
+        }
+
+        public void AddEdge(TEdge edge, Func<int, TNode> constructor)
         {
             if (Edges.Contains(edge)) return;
 
@@ -46,14 +64,9 @@
                 return;
             }
 
-            if (! addNode)
-            {
-                throw new ArgumentException("未定義の Node が Edge の定義に含まれています。");
-            }
-
-            if (! Nodes.Contains(edge.Start)) Nodes.Add(edge.Start);
-            if (! Nodes.Contains(edge.End)) Nodes.Add(edge.End);
-            Nodes.Sort();
+            if (!ContainNode(edge.Start)) Nodes.Add(constructor(edge.Start));
+            if (!ContainNode(edge.End)) Nodes.Add(constructor(edge.End));
+            Nodes.Sort(s_nodeIndexComparer);
             Edges.Add(edge);
         }
 
@@ -81,18 +94,20 @@
 
         private bool CheckAllEdge()
         {
-            var nodeSet = new HashSet<int>(Nodes);
+            var nodeSet = new HashSet<int>(GetNodeIndices());
             return Edges.All(e => nodeSet.Contains(e.Start)) && Edges.All(e => nodeSet.Contains(e.End));
         }
 
         private bool CheckEdge(IEdge edge)
         {
-            return Nodes.Contains(edge.Start) && Nodes.Contains(edge.End);
+            return ContainNode(edge.Start) && ContainNode(edge.End);
         }
 
-        public static Graph CreateGrid(int x, int y)
+        private bool ContainNode(int index) => Nodes.Any(n => n.Index == index);
+
+        public static Graph<NonDirectionalEdge, Node> CreateGrid(int x, int y)
         {
-            var edges = new List<IEdge>();
+            var edges = new List<NonDirectionalEdge>();
 
             foreach (int xi in Enumerable.Range(0, x))
             {
@@ -104,7 +119,7 @@
                 }
             }
 
-            return new Graph(edges);
+            return new Graph<NonDirectionalEdge, Node>(edges, (int index) => new Node(index));
         }
     }
 }
