@@ -22,8 +22,8 @@ namespace PathFinder.PathFinderAlgorithm
             priorityQueue.Enqueue(start, new MinCostMemo(0f, null));
             int iterCount = 0;
 
-            var costs = new Dictionary<int, MinCostMemo>(this.Graph.NodeIndices.Select(index => KeyValuePair.Create(index, new MinCostMemo())));
-            var visited = new Dictionary<int, bool>(this.Graph.NodeIndices.Select(index => KeyValuePair.Create(index, false)));
+            var costs = new Dictionary<int, MinCostMemo>(this.Graph.Nodes.Select(index => KeyValuePair.Create(index, new MinCostMemo())));
+            var visited = new Dictionary<int, bool>(this.Graph.Nodes.Select(index => KeyValuePair.Create(index, false)));
 
             while (priorityQueue.TryDequeue(out int nodeIndex, out var currentMinCostMemo))
             {

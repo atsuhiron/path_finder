@@ -38,5 +38,10 @@
         {
             return Index.GetHashCode();
         }
+
+        public Node(int index)
+        {
+            Index = index;
+        }
     }
 }

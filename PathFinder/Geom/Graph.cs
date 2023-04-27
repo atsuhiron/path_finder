@@ -6,12 +6,12 @@
         private static readonly NodeIndexComparer s_nodeIndexComparer = new();
 
         public List<IEdge> Edges { get; init; }
-        public List<int> NodeIndices { get; init; }
+        public List<INode> Nodes { get; init; }
 
         public Graph()
         {
             Edges = new List<IEdge>();
-            NodeIndices = new List<int>();
+            Nodes = new List<INode>();
         }
 
         public Graph(List<IEdge> edges)
@@ -19,15 +19,17 @@
             Edges = new HashSet<IEdge>(edges).ToList();
             var _ni = new HashSet<int>(edges.Select(e => e.Start));
             _ni.UnionWith(edges.Select(e => e.End));
-            NodeIndices = _ni.ToList();
-            NodeIndices.Sort();
+            
+            var nodeIndices = _ni.ToList();
+            Nodes = _ni.ToList();
+            Nodes.Sort();
         }
 
         public Graph(List<IEdge> edges, List<int> nodeIndices)
         {
             Edges = new HashSet<IEdge>(edges).ToList();
-            NodeIndices = nodeIndices;
-            NodeIndices.Sort();
+            Nodes = nodeIndices;
+            Nodes.Sort();
             if (! CheckAllEdge())
             {
                 throw new ArgumentException("未定義の Node が Edge の定義に含まれています。");
@@ -49,9 +51,9 @@
                 throw new ArgumentException("未定義の Node が Edge の定義に含まれています。");
             }
 
-            if (! NodeIndices.Contains(edge.Start)) NodeIndices.Add(edge.Start);
-            if (! NodeIndices.Contains(edge.End)) NodeIndices.Add(edge.End);
-            NodeIndices.Sort();
+            if (! Nodes.Contains(edge.Start)) Nodes.Add(edge.Start);
+            if (! Nodes.Contains(edge.End)) Nodes.Add(edge.End);
+            Nodes.Sort();
             Edges.Add(edge);
         }
 
@@ -75,17 +77,17 @@
             return edge.First();
         }
 
-        public int GetNodeCount() => NodeIndices.Count;
+        public int GetNodeCount() => Nodes.Count;
 
         private bool CheckAllEdge()
         {
-            var nodeSet = new HashSet<int>(NodeIndices);
+            var nodeSet = new HashSet<int>(Nodes);
             return Edges.All(e => nodeSet.Contains(e.Start)) && Edges.All(e => nodeSet.Contains(e.End));
         }
 
         private bool CheckEdge(IEdge edge)
         {
-            return NodeIndices.Contains(edge.Start) && NodeIndices.Contains(edge.End);
+            return Nodes.Contains(edge.Start) && Nodes.Contains(edge.End);
         }
 
         public static Graph CreateGrid(int x, int y)

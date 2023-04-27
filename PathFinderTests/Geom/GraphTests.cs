@@ -8,7 +8,7 @@ namespace PathFinderTests.Geom
         public void ConstructoeTestWithNoArg()
         {
             var graph = new Graph();
-            Assert.Empty(graph.NodeIndices);
+            Assert.Empty(graph.Nodes);
             Assert.Empty(graph.Edges);
         }
 
@@ -18,9 +18,9 @@ namespace PathFinderTests.Geom
             var edges = new List<IEdge>() { new NonDirectionalEdge(1, 0) };
             var graph = new Graph(edges);
 
-            Assert.Equal(2, graph.NodeIndices.Count);
-            Assert.Equal(0, graph.NodeIndices[0]);
-            Assert.Equal(1, graph.NodeIndices[1]);
+            Assert.Equal(2, graph.Nodes.Count);
+            Assert.Equal(0, graph.Nodes[0]);
+            Assert.Equal(1, graph.Nodes[1]);
         }
 
         [Fact]
@@ -30,9 +30,9 @@ namespace PathFinderTests.Geom
             var graph = new Graph(edges);
 
             Assert.Single(graph.Edges);
-            Assert.Equal(2, graph.NodeIndices.Count);
-            Assert.Equal(0, graph.NodeIndices[0]);
-            Assert.Equal(1, graph.NodeIndices[1]);
+            Assert.Equal(2, graph.Nodes.Count);
+            Assert.Equal(0, graph.Nodes[0]);
+            Assert.Equal(1, graph.Nodes[1]);
         }
 
         [Fact]
@@ -42,8 +42,8 @@ namespace PathFinderTests.Geom
             var nodeIndices = new List<int>() { 1, 0 };
             var graph = new Graph(edges, nodeIndices);
 
-            Assert.Equal(0, graph.NodeIndices[0]);
-            Assert.Equal(1, graph.NodeIndices[1]);
+            Assert.Equal(0, graph.Nodes[0]);
+            Assert.Equal(1, graph.Nodes[1]);
         }
 
         [Fact]
@@ -89,12 +89,12 @@ namespace PathFinderTests.Geom
             var sut = new Graph(new List<IEdge>() { new NonDirectionalEdge(1, 0), new NonDirectionalEdge(0, 3) });
 
             Assert.Equal(2, sut.Edges.Count);
-            Assert.Equal(3, sut.NodeIndices.Count);
-            Assert.Equal(3, sut.NodeIndices[2]);
+            Assert.Equal(3, sut.Nodes.Count);
+            Assert.Equal(3, sut.Nodes[2]);
             sut.AddEdge(new NonDirectionalEdge(0, 2), true);
             Assert.Equal(3, sut.Edges.Count);
-            Assert.Equal(4, sut.NodeIndices.Count);
-            Assert.Equal(2, sut.NodeIndices[2]);
+            Assert.Equal(4, sut.Nodes.Count);
+            Assert.Equal(2, sut.Nodes[2]);
         }
 
         [Fact]
@@ -105,12 +105,12 @@ namespace PathFinderTests.Geom
             // 3 - 4 - 5
             var sut = Graph.CreateGrid(3, 2);
 
-            Assert.Contains(0, sut.NodeIndices);
-            Assert.Contains(1, sut.NodeIndices);
-            Assert.Contains(2, sut.NodeIndices);
-            Assert.Contains(3, sut.NodeIndices);
-            Assert.Contains(4, sut.NodeIndices);
-            Assert.Contains(5, sut.NodeIndices);
+            Assert.Contains(0, sut.Nodes);
+            Assert.Contains(1, sut.Nodes);
+            Assert.Contains(2, sut.Nodes);
+            Assert.Contains(3, sut.Nodes);
+            Assert.Contains(4, sut.Nodes);
+            Assert.Contains(5, sut.Nodes);
 
             Assert.Contains(new NonDirectionalEdge(0, 1), sut.Edges);
             Assert.Contains(new NonDirectionalEdge(1, 2), sut.Edges);
