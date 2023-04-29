@@ -3,7 +3,7 @@ using PathFinder.PathFinderAlgorithm;
 
 namespace PathFinderTests.PathFinderAlgorithm
 {
-    public class DijkstraTests
+    public class DijkstraBDTests
     {
         [Fact]
         public void FindRouteNoEdgeTest()
@@ -16,7 +16,7 @@ namespace PathFinderTests.PathFinderAlgorithm
             },
             (int index) => new Node(index));
 
-            var dijkstra = new Dijkstra<NonDirectionalEdge, Node>(_graph);
+            var dijkstra = new DijkstraBD<NonDirectionalEdge, Node>(_graph);
             var route = dijkstra.FindRoute(0, 0);
 
             Assert.True(route.Success);
@@ -37,7 +37,7 @@ namespace PathFinderTests.PathFinderAlgorithm
             },
             (int index) => new Node(index));
 
-            var dijkstra = new Dijkstra<NonDirectionalEdge, Node>(_graph);
+            var dijkstra = new DijkstraBD<NonDirectionalEdge, Node>(_graph);
             var route = dijkstra.FindRoute(0, 1);
 
             Assert.True(route.Success);
@@ -60,7 +60,7 @@ namespace PathFinderTests.PathFinderAlgorithm
             },
             (int index) => new Node(index));
 
-            var dijkstra = new Dijkstra<NonDirectionalEdge, Node>(_graph);
+            var dijkstra = new DijkstraBD<NonDirectionalEdge, Node>(_graph);
             var route = dijkstra.FindRoute(0, 2);
 
             Assert.True(route.Success);
@@ -99,7 +99,7 @@ namespace PathFinderTests.PathFinderAlgorithm
             },
             (int index) => new Node(index));
 
-            var dijkstra = new Dijkstra<NonDirectionalEdge, Node>(_graph);
+            var dijkstra = new DijkstraBD<NonDirectionalEdge, Node>(_graph);
             var route = dijkstra.FindRoute(0, 4);
 
             Assert.True(route.Success);

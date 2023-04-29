@@ -6,9 +6,9 @@ namespace PathFinder.PathFinderAlgorithm
         where TEdge : IEdge
         where TNode : INode
     {
-        private static readonly MinCostMemoComparer s_minCostMemoComparer = new();
+        protected static readonly MinCostMemoComparer s_minCostMemoComparer = new();
 
-        private const int MAX_ITER = 10000;
+        protected const int MAX_ITER = 10000;
 
         public Graph<TEdge, TNode> Graph { get; set; }
 
@@ -17,8 +17,10 @@ namespace PathFinder.PathFinderAlgorithm
             this.Graph = graph;
         }
 
-        public Route FindRoute(int start, int end)
+        public virtual Route FindRoute(int start, int end)
         {
+            if (start == end) return new Route(start, 0);
+
             var nodeCount = Graph.GetNodeCount();
             var priorityQueue = new PriorityQueue<int, MinCostMemo>(s_minCostMemoComparer);
             priorityQueue.Enqueue(start, new MinCostMemo(0f, null));
@@ -35,6 +37,8 @@ namespace PathFinder.PathFinderAlgorithm
                 costs[nodeIndex] = currentMinCostMemo;
                 visited[nodeIndex] = true;
 
+                if (nodeIndex == end) break;
+
                 foreach (var adjIndex in this.Graph.GetAdjacencies(nodeIndex))
                 {
                     var edge = this.Graph.SearchEdge(nodeIndex, adjIndex);
@@ -43,15 +47,14 @@ namespace PathFinder.PathFinderAlgorithm
                 iterCount++;
             }
 
-            // TODO: cost -> route
             var edges = BackwardRoute(costs, start, end);
             if (edges == null) return new Route(iterCount);
-            return new Route(edges, iterCount);
+            return new Route(edges.Select(e => (IEdge)e).ToList(), iterCount);
         }
 
-        private List<IEdge>? BackwardRoute(in Dictionary<int, MinCostMemo> minCostDict, int start, int end)
+        protected List<TEdge>? BackwardRoute(in Dictionary<int, MinCostMemo> minCostDict, int start, int end)
         {
-            var edges = new List<IEdge>();
+            var edges = new List<TEdge>();
             if (start == end) return edges;
 
             var currentIndex = end;

@@ -78,7 +78,7 @@
             return adj;
         }
 
-        public IEdge SearchEdge(int nodeIndex1, int nodeIndex2)
+        public TEdge SearchEdge(int nodeIndex1, int nodeIndex2)
         {
             var edge = Edges.Where(e => ((e.Start == nodeIndex1) && (e.End == nodeIndex2)) || (e.Start == nodeIndex2) && (e.End == nodeIndex1)).ToList();
             
@@ -96,7 +96,7 @@
             return Edges.All(e => nodeSet.Contains(e.Start)) && Edges.All(e => nodeSet.Contains(e.End));
         }
 
-        private bool CheckEdge(IEdge edge)
+        private bool CheckEdge(TEdge edge)
         {
             return ContainNode(edge.Start) && ContainNode(edge.End);
         }
