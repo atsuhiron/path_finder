@@ -19,6 +19,7 @@ namespace PathFinder.PathFinderAlgorithm
 
         public virtual Route FindRoute(int start, int end)
         {
+            if (! ContainNodeInGraph(start, end)) return new Route(0);
             if (start == end) return new Route(start, 0);
 
             var nodeCount = Graph.GetNodeCount();
@@ -77,6 +78,12 @@ namespace PathFinder.PathFinderAlgorithm
 
             edges.Reverse();
             return edges;
+        }
+
+        protected bool ContainNodeInGraph(int nodeIndex1, int nodeIndex2)
+        {
+            var indices = Graph.GetNodeIndices();
+            return indices.Contains(nodeIndex1) && indices.Contains(nodeIndex2);
         }
     }
 }

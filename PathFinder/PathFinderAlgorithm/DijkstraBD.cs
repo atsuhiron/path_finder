@@ -10,6 +10,7 @@ namespace PathFinder.PathFinderAlgorithm
 
         public override Route FindRoute(int start, int end)
         {
+            if (!ContainNodeInGraph(start, end)) return new Route(0);
             if (start == end) return new Route(start, 0);
 
             var nodeIndices = Graph.GetNodeIndices();

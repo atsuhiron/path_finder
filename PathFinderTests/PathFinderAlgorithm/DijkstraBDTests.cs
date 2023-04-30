@@ -111,5 +111,16 @@ namespace PathFinderTests.PathFinderAlgorithm
             Assert.Equal(3, route.RouteNodeIndices[3]);
             Assert.Equal(4, route.RouteNodeIndices[4]);
         }
+
+        [Fact]
+        public void FindRouteGridTest()
+        {
+            var _graph = Graph<NonDirectionalEdge, Node>.CreateGrid(10, 10);
+
+            var dijkstra = new DijkstraBD<NonDirectionalEdge, Node>(_graph);
+            var route = dijkstra.FindRoute(0, 99);
+
+            Assert.True(route.Success);
+        }
     }
 }
