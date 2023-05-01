@@ -8,6 +8,8 @@
         public bool Directed { get; init; }
 
         public int GetHashCodeCore();
+
+        public string GetNodeType();
     }
 
     public abstract class BaseEdge : IEdge
@@ -18,6 +20,8 @@
         public abstract bool Directed { get; init; }
 
         public abstract int GetHashCodeCore();
+
+        public abstract string GetNodeType();
 
         public override string ToString()
         {
@@ -56,6 +60,8 @@
             Cost = cost;
             Directed = false;
         }
+
+        public override string GetNodeType() => typeof(NonDirectionalEdge).Name;
 
         public override int GetHashCodeCore()
         {

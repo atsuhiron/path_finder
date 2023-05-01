@@ -38,7 +38,7 @@
     {
         public override int Index { get; init; }
 
-        public override string GetNodeType() => "CoreNode";
+        public override string GetNodeType() => typeof(CoreNode).Name;
 
         public override int GetHashCodeCore()
         {
