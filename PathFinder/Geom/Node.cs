@@ -5,6 +5,8 @@
         public int Index { get; init; }
 
         public int GetHashCodeCore();
+
+        public string GetNodeType();
     }
 
     public abstract class BaseNode : INode
@@ -12,6 +14,8 @@
         public abstract int Index { get; init; }
 
         public abstract int GetHashCodeCore();
+
+        public abstract string GetNodeType();
 
         public override bool Equals(object? obj)
         {
@@ -33,6 +37,8 @@
     public class CoreNode : BaseNode
     {
         public override int Index { get; init; }
+
+        public override string GetNodeType() => "CoreNode";
 
         public override int GetHashCodeCore()
         {
