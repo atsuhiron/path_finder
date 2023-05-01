@@ -30,7 +30,7 @@
         }
     }
 
-    public class Node : BaseNode
+    public class CoreNode : BaseNode
     {
         public override int Index { get; init; }
 
@@ -39,7 +39,7 @@
             return Index.GetHashCode();
         }
 
-        public Node(int index)
+        public CoreNode(int index)
         {
             Index = index;
         }

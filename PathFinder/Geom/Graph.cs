@@ -103,7 +103,7 @@
 
         private bool ContainNode(int index) => Nodes.Any(n => n.Index == index);
 
-        public static Graph<NonDirectionalEdge, Node> CreateGrid(int x, int y)
+        public static Graph<NonDirectionalEdge, CoreNode> CreateGrid(int x, int y)
         {
             var edges = new List<NonDirectionalEdge>();
 
@@ -117,7 +117,7 @@
                 }
             }
 
-            return new Graph<NonDirectionalEdge, Node>(edges, (int index) => new Node(index));
+            return new Graph<NonDirectionalEdge, CoreNode>(edges, (int index) => new CoreNode(index));
         }
     }
 }
