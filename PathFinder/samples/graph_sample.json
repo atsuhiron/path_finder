@@ -1,0 +1,29 @@
+{
+  "EdgeType": "NonDirectionalEdge",
+  "NodeType": "CoreNode",
+  "Edges": [
+    {
+      "Start": 0,
+      "End": 1,
+      "Cost": 1,
+      "Directed": false
+    },
+    {
+      "Start": 0,
+      "End": 2,
+      "Cost": 1,
+      "Directed": false
+    },
+    {
+      "Start": 1,
+      "End": 2,
+      "Cost": 1,
+      "Directed": false
+    }
+  ],
+  "Nodes": [
+    { "Index": 0 },
+    { "Index": 1 },
+    { "Index": 2 }
+  ]
+}

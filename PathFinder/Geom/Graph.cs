@@ -7,17 +7,26 @@
         private static readonly EdgeCostComparer<TEdge> s_costComparer = new();
         private static readonly NodeIndexComparer<TNode> s_nodeIndexComparer = new();
 
+        public string EdgeType { get; init; }
+        public string NodeType { get; init; }
+
         public List<TEdge> Edges { get; init; }
         public List<TNode> Nodes { get; init; }
 
         public Graph()
         {
+            EdgeType = typeof(TEdge).Name;
+            NodeType = typeof(TNode).Name;
+
             Edges = new List<TEdge>();
             Nodes = new List<TNode>();
         }
 
         public Graph(List<TEdge> edges, Func<int, TNode> constructor)
         {
+            EdgeType = typeof(TEdge).Name;
+            NodeType = typeof(TNode).Name;
+
             Edges = new HashSet<TEdge>(edges).ToList();
             var _ni = new HashSet<int>(edges.Select(e => e.Start));
             _ni.UnionWith(edges.Select(e => e.End));
@@ -29,6 +38,9 @@
 
         public Graph(List<TEdge> edges, List<TNode> nodes)
         {
+            EdgeType = typeof(TEdge).Name;
+            NodeType = typeof(TNode).Name;
+
             Edges = new HashSet<TEdge>(edges).ToList();
             Nodes = nodes;
             Nodes.Sort(s_nodeIndexComparer);
