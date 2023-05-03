@@ -135,6 +135,44 @@ namespace PathFinderTests.Geom
         }
 
         [Fact]
+        public void CreateXYGridTest()
+        {
+            // 0 - 1 - 2
+            // |   |   |
+            // 3 - 4 - 5
+            var sut = Graph<NonDirectionalEdge, XYNode>.CreateXYGrid(3, 2);
+
+            var nodeIndices = sut.Nodes.Select(n => n.Index).ToList();
+            Assert.Contains(0, nodeIndices);
+            Assert.Contains(1, nodeIndices);
+            Assert.Contains(2, nodeIndices);
+            Assert.Contains(3, nodeIndices);
+            Assert.Contains(4, nodeIndices);
+            Assert.Contains(5, nodeIndices);
+
+            Assert.Equal(0, sut.Nodes[0].X);
+            Assert.Equal(1, sut.Nodes[1].X);
+            Assert.Equal(2, sut.Nodes[2].X);
+            Assert.Equal(0, sut.Nodes[3].X);
+            Assert.Equal(1, sut.Nodes[4].X);
+            Assert.Equal(2, sut.Nodes[5].X);
+            Assert.Equal(0, sut.Nodes[0].Y);
+            Assert.Equal(0, sut.Nodes[1].Y);
+            Assert.Equal(0, sut.Nodes[2].Y);
+            Assert.Equal(1, sut.Nodes[3].Y);
+            Assert.Equal(1, sut.Nodes[4].Y);
+            Assert.Equal(1, sut.Nodes[5].Y);
+
+            Assert.Contains(new NonDirectionalEdge(0, 1), sut.Edges);
+            Assert.Contains(new NonDirectionalEdge(1, 2), sut.Edges);
+            Assert.Contains(new NonDirectionalEdge(0, 3), sut.Edges);
+            Assert.Contains(new NonDirectionalEdge(1, 4), sut.Edges);
+            Assert.Contains(new NonDirectionalEdge(2, 5), sut.Edges);
+            Assert.Contains(new NonDirectionalEdge(3, 4), sut.Edges);
+            Assert.Contains(new NonDirectionalEdge(4, 5), sut.Edges);
+        }
+
+        [Fact]
         public void GetAdjacenciesTest()
         {
             // 0 - 1 - 2
