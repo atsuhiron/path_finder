@@ -131,5 +131,27 @@
 
             return new Graph<NonDirectionalEdge, CoreNode>(edges, (int index) => new CoreNode(index));
         }
+
+        public static Graph<NonDirectionalEdge, XYNode> CreateXYGrid(int x, int y)
+        {
+            var edges = new List<NonDirectionalEdge>();
+            var nodes = new List<XYNode>();
+            int counter = 0;
+
+            foreach (int xi in Enumerable.Range(0, x))
+            {
+                foreach (int yi in Enumerable.Range(0, y))
+                {
+                    nodes.Add(new XYNode(counter, xi, yi));
+
+                    var cur = x * yi + xi;
+                    if (xi != x - 1) edges.Add(new NonDirectionalEdge(cur, cur + 1));
+                    if (yi != y - 1) edges.Add(new NonDirectionalEdge(cur, cur + x));
+                    counter++;
+                }
+            }
+
+            return new Graph<NonDirectionalEdge, XYNode>(edges, nodes);
+        }
     }
 }

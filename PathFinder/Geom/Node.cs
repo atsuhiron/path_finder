@@ -48,4 +48,25 @@
             Index = index;
         }
     }
+
+    public class XYNode : BaseNode
+    {
+        public override int Index { get; init; }
+
+        public float X { get; init; }
+
+        public float Y { get; init; }
+
+        public override int GetHashCodeCore()
+        {
+            return Tuple.Create(Index, X, Y).GetHashCode();
+        }
+
+        public XYNode(int index, float x, float y)
+        {
+            Index = index;
+            X = x;
+            Y = y;
+        }
+    }
 }
