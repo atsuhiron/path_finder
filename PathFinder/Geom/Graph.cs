@@ -138,9 +138,9 @@
             var nodes = new List<XYNode>();
             int counter = 0;
 
-            foreach (int xi in Enumerable.Range(0, x))
+            foreach (int yi in Enumerable.Range(0, y))
             {
-                foreach (int yi in Enumerable.Range(0, y))
+                foreach (int xi in Enumerable.Range(0, x))
                 {
                     nodes.Add(new XYNode(counter, xi, yi));
 
