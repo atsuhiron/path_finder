@@ -9,7 +9,7 @@
 
         public int GetHashCodeCore();
 
-        public string GetNodeType();
+        public string GetEdgeType();
     }
 
     public abstract class BaseEdge : IEdge
@@ -21,7 +21,7 @@
 
         public abstract int GetHashCodeCore();
 
-        public abstract string GetNodeType();
+        public string GetEdgeType() => GetType().Name;
 
         public override string ToString()
         {
@@ -60,8 +60,6 @@
             Cost = cost;
             Directed = false;
         }
-
-        public override string GetNodeType() => typeof(NonDirectionalEdge).Name;
 
         public override int GetHashCodeCore()
         {

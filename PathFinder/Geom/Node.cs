@@ -15,7 +15,7 @@
 
         public abstract int GetHashCodeCore();
 
-        public abstract string GetNodeType();
+        public string GetNodeType() => GetType().Name;
 
         public override bool Equals(object? obj)
         {
@@ -37,8 +37,6 @@
     public class CoreNode : BaseNode
     {
         public override int Index { get; init; }
-
-        public override string GetNodeType() => typeof(CoreNode).Name;
 
         public override int GetHashCodeCore()
         {
