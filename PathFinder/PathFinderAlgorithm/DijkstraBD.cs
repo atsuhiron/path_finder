@@ -48,7 +48,7 @@ namespace PathFinder.PathFinderAlgorithm
                     foreach (var adjIndex in this.Graph.GetAdjacencies(nodeIndexForeward))
                     {
                         var edge = this.Graph.SearchEdge(nodeIndexForeward, adjIndex);
-                        priorityQueueForeward.Enqueue(adjIndex, new MinCostMemo(currentMinCostMemoForeward.Cost + edge.Cost, nodeIndexForeward));
+                        priorityQueueForeward.Enqueue(adjIndex, new MinCostMemo(CalcCost(edge, currentMinCostMemoForeward.Cost), nodeIndexForeward));
                     }
                 }
 
@@ -66,7 +66,7 @@ namespace PathFinder.PathFinderAlgorithm
                     foreach (var adjIndex in this.Graph.GetAdjacencies(nodeIndexBackward))
                     {
                         var edge = this.Graph.SearchEdge(nodeIndexBackward, adjIndex);
-                        priorityQueueBackward.Enqueue(adjIndex, new MinCostMemo(currentMinCostMemoBackward.Cost + edge.Cost, nodeIndexBackward));
+                        priorityQueueBackward.Enqueue(adjIndex, new MinCostMemo(CalcCost(edge, currentMinCostMemoBackward.Cost), nodeIndexBackward));
                     }
                 }
 

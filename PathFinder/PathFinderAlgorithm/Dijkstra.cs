@@ -43,7 +43,7 @@ namespace PathFinder.PathFinderAlgorithm
                 foreach (var adjIndex in this.Graph.GetAdjacencies(nodeIndex))
                 {
                     var edge = this.Graph.SearchEdge(nodeIndex, adjIndex);
-                    priorityQueue.Enqueue(adjIndex, new MinCostMemo(currentMinCostMemo.Cost + edge.Cost, nodeIndex));
+                    priorityQueue.Enqueue(adjIndex, new MinCostMemo(CalcCost(edge, currentMinCostMemo.Cost), nodeIndex));
                 }
                 iterCount++;
             }
@@ -51,6 +51,11 @@ namespace PathFinder.PathFinderAlgorithm
             var edges = BackwardRoute(costs, start, end);
             if (edges == null) return new Route(iterCount);
             return new Route(edges.Select(e => (IEdge)e).ToList(), iterCount);
+        }
+
+        protected virtual float CalcCost(TEdge edge, float initValue=0f)
+        {
+            return initValue + edge.Cost;
         }
 
         protected List<TEdge>? BackwardRoute(in Dictionary<int, MinCostMemo> minCostDict, int start, int end)
