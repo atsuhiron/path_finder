@@ -23,7 +23,6 @@
         public Graph(List<IEdge> edges, Func<int, INode> constructor)
         {
             EdgeType = edges.FirstOrDefault()?.GetType().Name ?? string.Empty;
-            NodeType = string.Empty;
 
             Edges = new HashSet<IEdge>(edges).ToList();
             var _ni = new HashSet<int>(edges.Select(e => e.Start));
@@ -32,6 +31,7 @@
             var nodeIndices = _ni.ToList();
             Nodes = _ni.Select(ni => constructor(ni)).ToList();
             Nodes.Sort(s_nodeIndexComparer);
+            NodeType = Nodes.FirstOrDefault()?.GetType().Name ?? string.Empty;
         }
 
         public Graph(List<IEdge> edges, List<INode> nodes)

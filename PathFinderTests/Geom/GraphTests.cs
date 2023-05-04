@@ -224,5 +224,110 @@ namespace PathFinderTests.Geom
             var lowestEdge = sut.SearchEdge(0, 1);
             Assert.Equal(1.5, lowestEdge.Cost);
         }
+
+        [Fact]
+        public void SetEdgeTypeTest()
+        {
+            // Manual setting
+            var sut = new Graph();
+            Assert.Empty(sut.EdgeType);
+
+            bool res1 = sut.TrySetEdgeType();
+            Assert.Empty(sut.EdgeType);
+            Assert.False(res1);
+
+            bool ret2 = sut.TrySetEdgeType(typeof(NonDirectionalEdge).Name);
+            Assert.Equal(typeof(NonDirectionalEdge).Name, sut.EdgeType);
+            Assert.True(ret2);
+        }
+
+        [Fact]
+        public void SetEdgeTypeEstimationTest()
+        {
+            // Setting by estimation
+            var sut = new Graph();
+            Assert.Empty(sut.EdgeType);
+
+            sut.AddEdge(new NonDirectionalEdge(0, 1), (int index) => new CoreNode(index));
+            bool ret = sut.TrySetEdgeType();
+            Assert.True(ret);
+            Assert.Equal(typeof(NonDirectionalEdge).Name, sut.EdgeType);
+        }
+
+        [Fact]
+        public void SetEdgeTypeInitTest()
+        {
+            // Setting on initialization
+            var edges = new List<IEdge>() { new NonDirectionalEdge(0, 1) };
+            var sut = new Graph(edges, (int index) => new CoreNode(index));
+            Assert.Equal(typeof(NonDirectionalEdge).Name, sut.EdgeType);
+        }
+
+        [Fact]
+        public void SetEdgeTypeInitEmptyTest()
+        {
+            // Setting on initialization (but it is failed because edges and nodes are empty)
+            var emptyEdges = new List<IEdge>() { };
+            var emptyNodes = new List<INode>() { };
+            var sut = new Graph(emptyEdges, emptyNodes);
+            Assert.Empty(sut.EdgeType);
+        }
+
+        [Fact]
+        public void SetNodeTypeTest()
+        {
+            // Manual setting
+            var sut = new Graph();
+            Assert.Empty(sut.NodeType);
+
+            bool res1 = sut.TrySetNodeType();
+            Assert.Empty(sut.NodeType);
+            Assert.False(res1);
+
+            bool ret2 = sut.TrySetNodeType(typeof(CoreNode).Name);
+            Assert.Equal(typeof(CoreNode).Name, sut.NodeType);
+            Assert.True(ret2);
+        }
+
+        [Fact]
+        public void SetNodeTypeEstimationTest()
+        {
+            // Setting by estimation
+            var sut = new Graph();
+            Assert.Empty(sut.NodeType);
+
+            sut.AddEdge(new NonDirectionalEdge(0, 1), (int index) => new CoreNode(index));
+            bool ret = sut.TrySetNodeType();
+            Assert.True(ret);
+            Assert.Equal(typeof(CoreNode).Name, sut.NodeType);
+        }
+
+        [Fact]
+        public void SetNodeTypeInitTest()
+        {
+            // Setting on initialization
+            var edges = new List<IEdge>() { new NonDirectionalEdge(0, 1) };
+            var sut = new Graph(edges, (int index) => new CoreNode(index));
+            Assert.Equal(typeof(CoreNode).Name, sut.NodeType);
+        }
+
+        [Fact]
+        public void SetNodeTypeInitEmptyTest()
+        {
+            // Setting on initialization (but it is failed because edges and nodes are empty)
+            var emptyEdges = new List<IEdge>() { };
+            var emptyNodes = new List<INode>() { };
+            var sut = new Graph(emptyEdges, emptyNodes);
+            Assert.Empty(sut.NodeType);
+        }
+
+        [Fact]
+        public void SetNodeTypeInitEmptyTest2()
+        {
+            // Setting on initialization (but it is failed because edges and nodes are empty)
+            var emptyEdges = new List<IEdge>() { };
+            var sut = new Graph(emptyEdges, (int index) => new CoreNode(index));
+            Assert.Empty(sut.NodeType);
+        }
     }
 }
