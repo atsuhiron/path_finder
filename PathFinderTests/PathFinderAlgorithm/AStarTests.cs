@@ -10,19 +10,12 @@ namespace PathFinderTests.PathFinderAlgorithm
         {
             //   3.2
             // 0 --- 1
-            var _graph = new Graph<NonDirectionalEdge, XYNode>(
-                new List<NonDirectionalEdge>()
-                {
-                    new NonDirectionalEdge(0, 1, 3.2f)
-                },
-                new List<XYNode>
-                {
-                    new XYNode(0, 0, 0),
-                    new XYNode(1, 1, 0)
-                }
+            var _graph = new Graph(
+                new List<IEdge>() { new NonDirectionalEdge(0, 1, 3.2f) }, 
+                new List<INode> { new XYNode(0, 0, 0), new XYNode(1, 1, 0) }
             );
 
-            var astar = new AStar<NonDirectionalEdge, XYNode>(_graph);
+            var astar = new AStar<XYNode>(_graph);
             var route = astar.FindRoute(0, 0);
 
             Assert.True(route.Success);
@@ -37,19 +30,19 @@ namespace PathFinderTests.PathFinderAlgorithm
         {
             //   3.2
             // 0 --- 1
-            var _graph = new Graph<NonDirectionalEdge, XYNode>(
-                new List<NonDirectionalEdge>()
+            var _graph = new Graph(
+                new List<IEdge>()
                 {
                     new NonDirectionalEdge(0, 1, 3.2f)
                 },
-                new List<XYNode>
+                new List<INode>
                 {
                     new XYNode(0, 0, 0),
                     new XYNode(1, 1, 0)
                 }
             );
 
-            var astar = new AStar<NonDirectionalEdge, XYNode>(_graph);
+            var astar = new AStar<XYNode>(_graph);
             var route = astar.FindRoute(0, 1);
 
             Assert.True(route.Success);
@@ -65,13 +58,13 @@ namespace PathFinderTests.PathFinderAlgorithm
         {
             //   3.2   1.0
             // 0 --- 1 --- 2
-            var _graph = new Graph<NonDirectionalEdge, XYNode>(
-                new List<NonDirectionalEdge>()
+            var _graph = new Graph(
+                new List<IEdge>()
                 {
                     new NonDirectionalEdge(0, 1, 3.2f),
                     new NonDirectionalEdge(1, 2, 1.0f)
                 },
-                new List<XYNode>
+                new List<INode>
                 {
                     new XYNode(0, 0, 0),
                     new XYNode(1, 1, 0),
@@ -79,7 +72,7 @@ namespace PathFinderTests.PathFinderAlgorithm
                 }
             );
 
-            var astar = new AStar<NonDirectionalEdge, XYNode>(_graph);
+            var astar = new AStar<XYNode>(_graph);
             var route = astar.FindRoute(0, 2);
 
             Assert.True(route.Success);
@@ -93,9 +86,9 @@ namespace PathFinderTests.PathFinderAlgorithm
         [Fact]
         public void FindRouteGridTest()
         {
-            var _graph = Graph<NonDirectionalEdge, XYNode>.CreateXYGrid(10, 10);
+            var _graph = Graph.CreateXYGrid(10, 10);
 
-            var astar = new AStar<NonDirectionalEdge, XYNode>(_graph);
+            var astar = new AStar<XYNode>(_graph);
             var route = astar.FindRoute(0, 99);
 
             Assert.True(route.Success);

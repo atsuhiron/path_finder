@@ -2,11 +2,10 @@
 
 namespace PathFinder.PathFinderAlgorithm
 {
-    public class DijkstraBD<TEdge, TNode> : Dijkstra<TEdge, TNode>
+    public class DijkstraBD<TEdge> : Dijkstra
         where TEdge : NonDirectionalEdge
-        where TNode : class, INode
     {
-        public DijkstraBD(Graph<TEdge, TNode> graph) : base(graph) { }
+        public DijkstraBD(Graph graph) : base(graph) { }
 
         public override Route FindRoute(int start, int end)
         {
@@ -77,8 +76,8 @@ namespace PathFinder.PathFinderAlgorithm
 
         private Route Postprocess(in Dictionary<int, MinCostMemo> costsF, in Dictionary<int, MinCostMemo> costsB, int start, int end, int midNodeIndex, int iterCount)
         {
-            var edgesForeward = BackwardRoute(costsF, start, midNodeIndex) ?? new List<TEdge>();
-            var edgesBackward = BackwardRoute(costsB, end, midNodeIndex) ?? new List<TEdge>();
+            var edgesForeward = BackwardRoute(costsF, start, midNodeIndex) ?? new List<IEdge>();
+            var edgesBackward = BackwardRoute(costsB, end, midNodeIndex) ?? new List<IEdge>();
             edgesBackward.Reverse();
 
             edgesForeward.AddRange(edgesBackward);

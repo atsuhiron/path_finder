@@ -2,25 +2,24 @@
 
 namespace PathFinder.PathFinderAlgorithm
 {
-    public class AStar<TEdge, TNode> : Dijkstra<TEdge, TNode>
-        where TEdge : IEdge
+    public class AStar<TNode> : Dijkstra
         where TNode : class, INode, IXYCoordinated
     {
         public delegate float CalcCostCoreDelegate(float edgeCost, float deltaX, float deltaY);
 
         private readonly CalcCostCoreDelegate CalcCostCore;
 
-        public AStar(Graph<TEdge, TNode> graph) : base(graph)
+        public AStar(Graph graph) : base(graph)
         {
             CalcCostCore = L2Heuristics;
         }
 
-        public AStar(Graph<TEdge, TNode> graph, CalcCostCoreDelegate calcCostCoreDelegate) : base(graph)
+        public AStar(Graph graph, CalcCostCoreDelegate calcCostCoreDelegate) : base(graph)
         {
             CalcCostCore = calcCostCoreDelegate;
         }
 
-        protected override float CalcCost(TEdge edge, float initValue = 0, TNode? end = null)
+        protected override float CalcCost(IEdge edge, float initValue = 0, INode? end = null)
         {
             if (end == null)
             {
@@ -34,8 +33,8 @@ namespace PathFinder.PathFinderAlgorithm
                 return base.CalcCost(edge, initValue);
             }
 
-            var deltaX = nextNode.X - currNode.X;
-            var deltaY = nextNode.Y - currNode.Y;
+            var deltaX = ((TNode)nextNode).X - ((TNode)currNode).X;
+            var deltaY = ((TNode)nextNode).Y - ((TNode)currNode).Y;
             return CalcCostCore(edge.Cost, deltaX, deltaY);
         }
 
