@@ -4,7 +4,7 @@ namespace PathFinder.PathFinderAlgorithm
 {
     public class Dijkstra<TEdge, TNode> : IPathFinder<TEdge, TNode>
         where TEdge : IEdge
-        where TNode : INode
+        where TNode : class, INode
     {
         protected static readonly MinCostMemoComparer s_minCostMemoComparer = new();
 
@@ -29,6 +29,7 @@ namespace PathFinder.PathFinderAlgorithm
 
             var costs = new Dictionary<int, MinCostMemo>(this.Graph.Nodes.Select(n => KeyValuePair.Create(n.Index, new MinCostMemo())));
             var visited = new Dictionary<int, bool>(this.Graph.Nodes.Select(n => KeyValuePair.Create(n.Index, false)));
+            TNode? endNode = Graph.Nodes.Find(n => n.Index == end);
 
             while (priorityQueue.TryDequeue(out int nodeIndex, out var currentMinCostMemo))
             {
@@ -43,7 +44,7 @@ namespace PathFinder.PathFinderAlgorithm
                 foreach (var adjIndex in this.Graph.GetAdjacencies(nodeIndex))
                 {
                     var edge = this.Graph.SearchEdge(nodeIndex, adjIndex);
-                    priorityQueue.Enqueue(adjIndex, new MinCostMemo(CalcCost(edge, currentMinCostMemo.Cost), nodeIndex));
+                    priorityQueue.Enqueue(adjIndex, new MinCostMemo(CalcCost(edge, currentMinCostMemo.Cost, endNode), nodeIndex));
                 }
                 iterCount++;
             }
@@ -53,7 +54,7 @@ namespace PathFinder.PathFinderAlgorithm
             return new Route(edges.Select(e => (IEdge)e).ToList(), iterCount);
         }
 
-        protected virtual float CalcCost(TEdge edge, float initValue=0f)
+        protected virtual float CalcCost(TEdge edge, float initValue = 0f, TNode? end = null)
         {
             return initValue + edge.Cost;
         }

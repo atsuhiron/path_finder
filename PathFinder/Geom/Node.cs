@@ -9,6 +9,13 @@
         public string GetNodeType();
     }
 
+    public interface IXYCoordinated
+    {
+        public float X { get; init; }
+
+        public float Y { get; init; }
+    }
+
     public abstract class BaseNode : INode
     {
         public abstract int Index { get; init; }
@@ -49,7 +56,7 @@
         }
     }
 
-    public class XYNode : BaseNode
+    public class XYNode : BaseNode, IXYCoordinated
     {
         public override int Index { get; init; }
 

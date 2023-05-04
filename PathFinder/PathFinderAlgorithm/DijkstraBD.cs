@@ -4,7 +4,7 @@ namespace PathFinder.PathFinderAlgorithm
 {
     public class DijkstraBD<TEdge, TNode> : Dijkstra<TEdge, TNode>
         where TEdge : NonDirectionalEdge
-        where TNode : INode
+        where TNode : class, INode
     {
         public DijkstraBD(Graph<TEdge, TNode> graph) : base(graph) { }
 
