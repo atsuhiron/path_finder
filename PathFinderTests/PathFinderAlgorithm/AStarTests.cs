@@ -99,6 +99,7 @@ namespace PathFinderTests.PathFinderAlgorithm
             var route = astar.FindRoute(0, 99);
 
             Assert.True(route.Success);
+            Assert.True(route.Iteration < 99);
         }
     }
 }
