@@ -89,5 +89,29 @@ namespace PathFinder.PathFinderAlgorithm
             var indices = Graph.GetNodeIndices();
             return indices.Contains(nodeIndex1) && indices.Contains(nodeIndex2);
         }
+
+        protected static bool TryAlignEdgeDirection(in List<IEdge> edges, out List<IEdge> alignedEdges)
+        {
+            alignedEdges = new List<IEdge>(edges);
+            if (alignedEdges.Count <= 1) return true;
+            
+            for (int i = 1; i < alignedEdges.Count; i++)
+            {
+                if (alignedEdges[i - 1].End != alignedEdges[i].Start)
+                {
+                    // Detect discontinuous
+                    if (alignedEdges[i - 1].End == alignedEdges[i].End)
+                    {
+                        // If continuity is maintained when reversed, do so.
+                        alignedEdges[i] = alignedEdges[i].CreateReversed();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
     }
 }

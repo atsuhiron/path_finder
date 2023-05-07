@@ -2,10 +2,13 @@
 
 namespace PathFinder.PathFinderAlgorithm
 {
-    public class DijkstraBD<TEdge> : Dijkstra
+    public class AStarBD<TNode, TEdge> : AStar<TNode>
+        where TNode : class, INode, IXYCoordinated
         where TEdge : NonDirectionalEdge
     {
-        public DijkstraBD(Graph graph) : base(graph) { }
+        public AStarBD(Graph graph) : base(graph) {}
+
+        public AStarBD(Graph graph, CalcCostCoreDelegate calcCostCoreDelegate) : base(graph, calcCostCoreDelegate) { }
 
         public override Route FindRoute(int start, int end)
         {
@@ -14,6 +17,8 @@ namespace PathFinder.PathFinderAlgorithm
 
             var nodeIndices = Graph.GetNodeIndices();
             int iterCount = 0;
+            INode? startNode = Graph.Nodes.Find(n => n.Index == start);
+            INode? endNode = Graph.Nodes.Find(n => n.Index == end);
 
             // Foreward
             var priorityQueueForeward = new PriorityQueue<int, MinCostMemo>(s_minCostMemoComparer);
@@ -28,12 +33,12 @@ namespace PathFinder.PathFinderAlgorithm
             var visitedBackward = new Dictionary<int, bool>(this.Graph.Nodes.Select(n => KeyValuePair.Create(n.Index, false)));
 
             while (
-                priorityQueueForeward.TryDequeue(out int nodeIndexForeward, out var currentMinCostMemoForeward) && 
+                priorityQueueForeward.TryDequeue(out int nodeIndexForeward, out var currentMinCostMemoForeward) &&
                 priorityQueueBackward.TryDequeue(out int nodeIndexBackward, out var currentMinCostMemoBackward)
             )
             {
                 if (iterCount >= MAX_ITER) return new Route(MAX_ITER);
-                if (! visitedForeward[nodeIndexForeward])
+                if (!visitedForeward[nodeIndexForeward])
                 {
                     costsForeward[nodeIndexForeward] = currentMinCostMemoForeward;
                     if (visitedBackward[nodeIndexForeward])
@@ -47,7 +52,7 @@ namespace PathFinder.PathFinderAlgorithm
                     foreach (var adjIndex in this.Graph.GetAdjacencies(nodeIndexForeward))
                     {
                         var edge = this.Graph.SearchEdge(nodeIndexForeward, adjIndex);
-                        priorityQueueForeward.Enqueue(adjIndex, new MinCostMemo(CalcCost(edge, currentMinCostMemoForeward.Cost), nodeIndexForeward));
+                        priorityQueueForeward.Enqueue(adjIndex, new MinCostMemo(CalcCost(edge, currentMinCostMemoForeward.Cost, endNode), nodeIndexForeward));
                     }
                 }
 
@@ -65,7 +70,7 @@ namespace PathFinder.PathFinderAlgorithm
                     foreach (var adjIndex in this.Graph.GetAdjacencies(nodeIndexBackward))
                     {
                         var edge = this.Graph.SearchEdge(nodeIndexBackward, adjIndex);
-                        priorityQueueBackward.Enqueue(adjIndex, new MinCostMemo(CalcCost(edge, currentMinCostMemoBackward.Cost), nodeIndexBackward));
+                        priorityQueueBackward.Enqueue(adjIndex, new MinCostMemo(CalcCost(edge, currentMinCostMemoBackward.Cost, startNode), nodeIndexBackward));
                     }
                 }
 
@@ -86,7 +91,7 @@ namespace PathFinder.PathFinderAlgorithm
             {
                 return new Route(edges, iterCount);
             }
-            return new Route(iterCount);            
+            return new Route(iterCount);
         }
     }
 }

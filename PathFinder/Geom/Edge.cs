@@ -10,6 +10,8 @@
         public int GetHashCodeCore();
 
         public string GetEdgeType();
+
+        public IEdge CreateReversed();
     }
 
     public abstract class BaseEdge : IEdge
@@ -20,6 +22,8 @@
         public abstract bool Directed { get; init; }
 
         public abstract int GetHashCodeCore();
+
+        public abstract IEdge CreateReversed();
 
         public string GetEdgeType() => GetType().Name;
 
@@ -66,6 +70,11 @@
             var small = Math.Min(Start, End);
             var large = Math.Max(Start, End);
             return Tuple.Create(small, large, Cost).GetHashCode();
+        }
+
+        public override IEdge CreateReversed()
+        {
+            return new NonDirectionalEdge(End, Start, Cost);
         }
     }
 }

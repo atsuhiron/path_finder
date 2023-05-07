@@ -38,12 +38,12 @@ namespace PathFinder.PathFinderAlgorithm
             return CalcCostCore(edge.Cost, deltaX, deltaY);
         }
 
-        private static float L1Heuristics(float edgeCost, float deltaX, float deltaY)
+        protected static float L1Heuristics(float edgeCost, float deltaX, float deltaY)
         {
             return edgeCost + MathF.Abs(deltaX) + MathF.Abs(deltaY);
         }
 
-        private static float L2Heuristics(float edgeCost, float deltaX, float deltaY)
+        protected static float L2Heuristics(float edgeCost, float deltaX, float deltaY)
         {
             return edgeCost + MathF.Sqrt(deltaX*deltaX + deltaY*deltaY);
         }
