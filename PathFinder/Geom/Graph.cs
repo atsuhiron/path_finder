@@ -1,47 +1,45 @@
 ﻿namespace PathFinder.Geom
 {
-    public class Graph<TEdge, TNode> 
-        where TEdge : IEdge
-        where TNode : INode
+    public class Graph
     {
-        private static readonly EdgeCostComparer<TEdge> s_costComparer = new();
-        private static readonly NodeIndexComparer<TNode> s_nodeIndexComparer = new();
+        private static readonly EdgeCostComparer<IEdge> s_costComparer = new();
+        private static readonly NodeIndexComparer<INode> s_nodeIndexComparer = new();
 
-        public string EdgeType { get; init; }
-        public string NodeType { get; init; }
+        public string EdgeType { get; private set; }
+        public string NodeType { get; private set; }
 
-        public List<TEdge> Edges { get; init; }
-        public List<TNode> Nodes { get; init; }
+        public List<IEdge> Edges { get; init; }
+        public List<INode> Nodes { get; init; }
 
         public Graph()
         {
-            EdgeType = typeof(TEdge).Name;
-            NodeType = typeof(TNode).Name;
+            EdgeType = string.Empty;
+            NodeType = string.Empty;
 
-            Edges = new List<TEdge>();
-            Nodes = new List<TNode>();
+            Edges = new List<IEdge>();
+            Nodes = new List<INode>();
         }
 
-        public Graph(List<TEdge> edges, Func<int, TNode> constructor)
+        public Graph(List<IEdge> edges, Func<int, INode> constructor)
         {
-            EdgeType = typeof(TEdge).Name;
-            NodeType = typeof(TNode).Name;
+            EdgeType = edges.FirstOrDefault()?.GetType().Name ?? string.Empty;
 
-            Edges = new HashSet<TEdge>(edges).ToList();
+            Edges = new HashSet<IEdge>(edges).ToList();
             var _ni = new HashSet<int>(edges.Select(e => e.Start));
             _ni.UnionWith(edges.Select(e => e.End));
             
             var nodeIndices = _ni.ToList();
             Nodes = _ni.Select(ni => constructor(ni)).ToList();
             Nodes.Sort(s_nodeIndexComparer);
+            NodeType = Nodes.FirstOrDefault()?.GetType().Name ?? string.Empty;
         }
 
-        public Graph(List<TEdge> edges, List<TNode> nodes)
+        public Graph(List<IEdge> edges, List<INode> nodes)
         {
-            EdgeType = typeof(TEdge).Name;
-            NodeType = typeof(TNode).Name;
+            EdgeType = edges.FirstOrDefault()?.GetType().Name ?? string.Empty;
+            NodeType = nodes.FirstOrDefault()?.GetType().Name ?? string.Empty;
 
-            Edges = new HashSet<TEdge>(edges).ToList();
+            Edges = new HashSet<IEdge>(edges).ToList();
             Nodes = nodes;
             Nodes.Sort(s_nodeIndexComparer);
             if (! CheckAllEdge())
@@ -50,9 +48,37 @@
             }
         }
 
+        public bool TrySetEdgeType(string edgeTypeName = "")
+        {
+            if (string.IsNullOrEmpty(edgeTypeName))
+            {
+                EdgeType = Edges.FirstOrDefault()?.GetType().Name ?? string.Empty;
+            }
+            else
+            {
+                EdgeType = edgeTypeName;
+            }
+
+            return !string.IsNullOrEmpty(EdgeType);
+        }
+
+        public bool TrySetNodeType(string nodeTypeName = "")
+        {
+            if (string.IsNullOrEmpty(nodeTypeName))
+            {
+                NodeType = Nodes.FirstOrDefault()?.GetType().Name ?? string.Empty;
+            }
+            else
+            {
+                NodeType = nodeTypeName;
+            }
+
+            return !string.IsNullOrEmpty(NodeType);
+        }
+
         public List<int> GetNodeIndices() => Nodes.Select(n => n.Index).ToList();
 
-        public void AddEdge(TEdge edge)
+        public void AddEdge(IEdge edge)
         {
             if (Edges.Contains(edge)) return;
 
@@ -64,7 +90,7 @@
             Edges.Add(edge);
         }
 
-        public void AddEdge(TEdge edge, Func<int, TNode> constructor)
+        public void AddEdge(IEdge edge, Func<int, INode> constructor)
         {
             if (Edges.Contains(edge)) return;
 
@@ -90,7 +116,7 @@
             return adj;
         }
 
-        public TEdge SearchEdge(int nodeIndex1, int nodeIndex2)
+        public IEdge SearchEdge(int nodeIndex1, int nodeIndex2)
         {
             var edge = Edges.Where(e => ((e.Start == nodeIndex1) && (e.End == nodeIndex2)) || (e.Start == nodeIndex2) && (e.End == nodeIndex1)).ToList();
             
@@ -108,14 +134,14 @@
             return Edges.All(e => nodeSet.Contains(e.Start)) && Edges.All(e => nodeSet.Contains(e.End));
         }
 
-        private bool CheckEdge(TEdge edge)
+        private bool CheckEdge(IEdge edge)
         {
             return ContainNode(edge.Start) && ContainNode(edge.End);
         }
 
         private bool ContainNode(int index) => Nodes.Any(n => n.Index == index);
 
-        public static Graph<NonDirectionalEdge, CoreNode> CreateGrid(int x, int y)
+        public static Graph CreateGrid(int x, int y)
         {
             var edges = new List<NonDirectionalEdge>();
 
@@ -129,10 +155,13 @@
                 }
             }
 
-            return new Graph<NonDirectionalEdge, CoreNode>(edges, (int index) => new CoreNode(index));
+            return new Graph(
+                edges.Select(e => (IEdge)e).ToList(),
+                (int index) => new CoreNode(index)
+            );
         }
 
-        public static Graph<NonDirectionalEdge, XYNode> CreateXYGrid(int x, int y)
+        public static Graph CreateXYGrid(int x, int y)
         {
             var edges = new List<NonDirectionalEdge>();
             var nodes = new List<XYNode>();
@@ -151,7 +180,10 @@
                 }
             }
 
-            return new Graph<NonDirectionalEdge, XYNode>(edges, nodes);
+            return new Graph(
+                edges.Select(e => (IEdge)e).ToList(),
+                nodes.Select(n => (INode)n).ToList()
+            );
         }
     }
 }

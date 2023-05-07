@@ -2,17 +2,15 @@
 
 namespace PathFinder.PathFinderAlgorithm
 {
-    public class Dijkstra<TEdge, TNode> : IPathFinder<TEdge, TNode>
-        where TEdge : IEdge
-        where TNode : class, INode
+    public class Dijkstra : IPathFinder
     {
         protected static readonly MinCostMemoComparer s_minCostMemoComparer = new();
 
         protected const int MAX_ITER = 10000;
 
-        public Graph<TEdge, TNode> Graph { get; set; }
+        public Graph Graph { get; set; }
 
-        public Dijkstra(Graph<TEdge, TNode> graph)
+        public Dijkstra(Graph graph)
         {
             this.Graph = graph;
         }
@@ -29,7 +27,7 @@ namespace PathFinder.PathFinderAlgorithm
 
             var costs = new Dictionary<int, MinCostMemo>(this.Graph.Nodes.Select(n => KeyValuePair.Create(n.Index, new MinCostMemo())));
             var visited = new Dictionary<int, bool>(this.Graph.Nodes.Select(n => KeyValuePair.Create(n.Index, false)));
-            TNode? endNode = Graph.Nodes.Find(n => n.Index == end);
+            INode? endNode = Graph.Nodes.Find(n => n.Index == end);
 
             while (priorityQueue.TryDequeue(out int nodeIndex, out var currentMinCostMemo))
             {
@@ -54,14 +52,14 @@ namespace PathFinder.PathFinderAlgorithm
             return new Route(edges.Select(e => (IEdge)e).ToList(), iterCount);
         }
 
-        protected virtual float CalcCost(TEdge edge, float initValue = 0f, TNode? end = null)
+        protected virtual float CalcCost(IEdge edge, float initValue = 0f, INode? end = null)
         {
             return initValue + edge.Cost;
         }
 
-        protected List<TEdge>? BackwardRoute(in Dictionary<int, MinCostMemo> minCostDict, int start, int end)
+        protected List<IEdge>? BackwardRoute(in Dictionary<int, MinCostMemo> minCostDict, int start, int end)
         {
-            var edges = new List<TEdge>();
+            var edges = new List<IEdge>();
             if (start == end) return edges;
 
             var currentIndex = end;

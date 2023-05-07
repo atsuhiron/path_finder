@@ -2,11 +2,9 @@
 
 namespace PathFinder.PathFinderAlgorithm
 {
-    public interface IPathFinder<TEdge, TNode>
-        where TEdge : IEdge
-        where TNode : INode
+    public interface IPathFinder
     {
-        public Graph<TEdge, TNode> Graph { get; set; }
+        public Graph Graph { get; set; }
         public Route FindRoute(int start, int end);
     }
 }
