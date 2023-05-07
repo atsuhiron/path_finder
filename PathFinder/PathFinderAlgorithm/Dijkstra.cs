@@ -49,7 +49,7 @@ namespace PathFinder.PathFinderAlgorithm
 
             var edges = BackwardRoute(costs, start, end);
             if (edges == null) return new Route(iterCount);
-            return new Route(edges.Select(e => (IEdge)e).ToList(), iterCount);
+            return new Route(edges, iterCount);
         }
 
         protected virtual float CalcCost(IEdge edge, float initValue = 0f, INode? end = null)
