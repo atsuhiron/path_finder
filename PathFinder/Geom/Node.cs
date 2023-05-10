@@ -41,7 +41,7 @@
         }
     }
 
-    public class CoreNode : BaseNode
+    public class CoreNode : BaseNode, IParsableDict<CoreNode>
     {
         public override int Index { get; init; }
 
@@ -54,20 +54,17 @@
         {
             Index = index;
         }
+
+        public static CoreNode Parse(Dictionary<string, dynamic?> dict) => new(dict["Index"]);
     }
 
-    public class XYNode : BaseNode, IXYCoordinated
+    public class XYNode : BaseNode, IXYCoordinated, IParsableDict<XYNode>
     {
         public override int Index { get; init; }
 
         public float X { get; init; }
 
-        public float Y { get; init; }
-
-        public override int GetHashCodeCore()
-        {
-            return Tuple.Create(Index, X, Y).GetHashCode();
-        }
+        public float Y { get; init; }        
 
         public XYNode(int index, float x, float y)
         {
@@ -75,5 +72,12 @@
             X = x;
             Y = y;
         }
+
+        public override int GetHashCodeCore()
+        {
+            return Tuple.Create(Index, X, Y).GetHashCode();
+        }
+
+        public static XYNode Parse(Dictionary<string, dynamic?> dict) => new(dict["Index"], dict["X"], dict["Y"]);
     }
 }

@@ -50,7 +50,7 @@
         }
     }
 
-    public class NonDirectionalEdge : BaseEdge
+    public class NonDirectionalEdge : BaseEdge, IParsableDict<NonDirectionalEdge>
     {
         public override int Start { get; init; }
         public override int End { get; init; }
@@ -76,5 +76,7 @@
         {
             return new NonDirectionalEdge(End, Start, Cost);
         }
+
+        public static NonDirectionalEdge Parse(Dictionary<string, dynamic?> dict) => new(dict["Start"], dict["End"], dict["Cost"]);
     }
 }
