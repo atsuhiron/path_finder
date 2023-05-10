@@ -7,7 +7,7 @@ namespace PathFinderTests.IO
 {
     public class ToJsonTests
     {
-        private Graph GenSampleGraph()
+        private static Graph GenSampleGraph()
         {
             var edges = new List<IEdge>()
             {
