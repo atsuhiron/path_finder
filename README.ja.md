@@ -1,16 +1,16 @@
 # path_finder
-Finds the shortest path between any two nodes in a graph structure.
+グラフ構造内での任意2ノード間の最短経路を探索します。
 
 ## 使い方
-1. Define the graph, either by loading a json file (1) or defining it on the fly (2).
-1. Create pathfinding instance(3)
-1. Specify the start and goal node indices to obtain a route. (4)
+1. グラフを定義します。json ファイルを読み込むか(1)、その場で定義します(2)。
+1. 経路探索インスタンスを生成する。(3)
+1. スタートとゴールのノード番号を指定すれば、経路が得られます。(4)
 ```CSharp
 using PathFinder.IO;
 
 var graph = FromJson.Load("path/to/file.json"); // (1)
 /*
-// The following graph will be produced.
+// 以下のようなグラフが出来上がる。
 //       2.0
 //     0 --- 1
 // 1.0 |     | 2.0
@@ -32,7 +32,7 @@ var graph = new Graph(
 var finder = new Dijkstra(graph); // (3)
 var route = finder.FindRoute(0, 3); // (4)
 
-// Show result
+// 結果の表示
 Console.WriteLine($"Success: {route.Success}");
 Console.WriteLine($"Iteration number: {route.Iteration}");
 Console.WriteLine($"Total cost: {route.SumCost()}");
@@ -46,7 +46,7 @@ for (int i = 0; i < route.RouteNodeIndices.Count; i++) Console.WriteLine($"Node{
 ```
 
 ## JSON のサンプル
-The graph generated in (2) above is represented by the following JSON.
+上記の (2) で生成しているグラフは以下のような JSON で表されます。
 ```json
 {
   "EdgeType": "NonDirectionalEdge",
