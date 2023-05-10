@@ -1,7 +1,7 @@
 # path_finder
 Finds the shortest path between any two nodes in a graph structure.
 
-## 使い方
+## Usage
 1. Define the graph, either by loading a json file (1) or defining it on the fly (2).
 1. Create pathfinding instance(3)
 1. Specify the start and goal node indices to obtain a route. (4)
@@ -45,7 +45,7 @@ for (int i = 0; i < route.RouteNodeIndices.Count; i++) Console.WriteLine($"Node{
 // Node2: 3
 ```
 
-## JSON のサンプル
+## Sample of JSON
 The graph generated in (2) above is represented by the following JSON.
 ```json
 {
